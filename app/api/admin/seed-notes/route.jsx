@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "../../../../config/db.jsx";
 import { notesTable } from "../../../../config/schema.js";
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs/server"; 
 
 const sampleNotes = [
   {
