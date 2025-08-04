@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1753780377733,
+      "tag": "0000_brainy_masked_marvel",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753780963674,
+      "tag": "0001_chief_black_crow",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753781168428,
+      "tag": "0002_parched_sharon_ventura",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1753782923195,
+      "tag": "0003_broken_gauntlet",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1753783344938,
+      "tag": "0004_safe_rhino",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1753783985957,
+      "tag": "0005_pink_zarek",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1753883210949,
+      "tag": "0006_misty_black_widow",
+      "breakpoints": true
+    }
+  ]
+}

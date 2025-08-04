@@ -1,0 +1,95 @@
+%PDF-1.4
+1 0 obj
+<<
+/Type /Catalog
+/Pages 2 0 R
+>>
+endobj
+
+2 0 obj
+<<
+/Type /Pages
+/Kids [3 0 R]
+/Count 1
+>>
+endobj
+
+3 0 obj
+<<
+/Type /Page
+/Parent 2 0 R
+/MediaBox [0 0 612 792]
+/Contents 4 0 R
+/Resources <<
+/Font <<
+/F1 5 0 R
+>>
+>>
+>>
+endobj
+
+4 0 obj
+<<
+/Length 600
+>>
+stream
+BT
+/F1 12 Tf
+50 750 Td
+(DATA STRUCTURES AND ALGORITHMS - 2023) Tj
+0 -30 Td
+(Time: 3 Hours                                    Max Marks: 100) Tj
+0 -50 Td
+(PART A - Answer ALL Questions (10 x 2 = 20 Marks)) Tj
+0 -30 Td
+(1. Define Data Structure and its types.) Tj
+0 -20 Td
+(2. What is the time complexity of binary search?) Tj
+0 -20 Td
+(3. Explain Stack data structure.) Tj
+0 -20 Td
+(4. What is a linked list?) Tj
+0 -20 Td
+(5. Define Big O notation.) Tj
+0 -50 Td
+(PART B - Answer any FIVE Questions (5 x 16 = 80 Marks)) Tj
+0 -30 Td
+(6. Implement stack using arrays with operations.) Tj
+0 -20 Td
+(7. Explain different sorting algorithms with examples.) Tj
+0 -20 Td
+(8. Discuss binary tree traversal methods.) Tj
+0 -20 Td
+(9. Implement queue using linked list.) Tj
+0 -20 Td
+(10. Explain graph representation and BFS algorithm.) Tj
+0 -20 Td
+(11. Discuss dynamic programming with examples.) Tj
+ET
+endstream
+endobj
+
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+
+xref
+0 6
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000274 00000 n 
+0000000926 00000 n 
+trailer
+<<
+/Size 6
+/Root 1 0 R
+>>
+startxref
+1001
+%%EOF

@@ -1,0 +1,179 @@
+const { neon } = require('@neondatabase/serverless');
+const { drizzle } = require('drizzle-orm/neon-http');
+require('dotenv').config();
+
+const pg = neon(process.env.DATABASE_URL);
+const db = drizzle({ client: pg });
+
+const branches = [
+  {
+    branchCode: 'CSE',
+    branchName: 'Computer Science Engineering',
+    description: 'Software development, algorithms, data structures, AI/ML, web development',
+    subjects: [
+      'Programming Fundamentals', 'Data Structures', 'Algorithms', 'Database Management',
+      'Operating Systems', 'Computer Networks', 'Software Engineering', 'Machine Learning',
+      'Web Development', 'Mobile App Development', 'Cybersecurity', 'Cloud Computing'
+    ],
+    toolsAvailable: ['IDE', 'Algorithm Visualizer', 'Database Designer', 'System Design Canvas']
+  },
+  {
+    branchCode: 'ECE',
+    branchName: 'Electronics & Communication Engineering',
+    description: 'Electronics, communication systems, signal processing, embedded systems',
+    subjects: [
+      'Circuit Analysis', 'Electronic Devices', 'Digital Electronics', 'Signal Processing',
+      'Communication Systems', 'Microprocessors', 'Embedded Systems', 'VLSI Design',
+      'Antenna Theory', 'Control Systems', 'Power Electronics', 'RF Engineering'
+    ],
+    toolsAvailable: ['Circuit Simulator', 'Signal Processing Lab', 'Microcontroller Emulator']
+  },
+  {
+    branchCode: 'MECH',
+    branchName: 'Mechanical Engineering',
+    description: 'Mechanics, thermodynamics, manufacturing, design, materials',
+    subjects: [
+      'Engineering Mechanics', 'Thermodynamics', 'Fluid Mechanics', 'Heat Transfer',
+      'Manufacturing Processes', 'Machine Design', 'Materials Science', 'CAD/CAM',
+      'Automotive Engineering', 'Robotics', 'Industrial Engineering', 'Quality Control'
+    ],
+    toolsAvailable: ['Thermodynamics Calculator', 'Material Database', 'CAD Viewer']
+  },
+  {
+    branchCode: 'CIVIL',
+    branchName: 'Civil Engineering',
+    description: 'Construction, structures, transportation, environmental engineering',
+    subjects: [
+      'Engineering Mechanics', 'Structural Analysis', 'Concrete Technology', 'Soil Mechanics',
+      'Transportation Engineering', 'Water Resources', 'Environmental Engineering', 'Construction Management',
+      'Earthquake Engineering', 'Highway Engineering', 'Building Planning', 'Surveying'
+    ],
+    toolsAvailable: ['Structural Analysis', 'Surveying Calculator', 'Construction Planner']
+  },
+  {
+    branchCode: 'EEE',
+    branchName: 'Electrical & Electronics Engineering',
+    description: 'Power systems, control systems, electrical machines, power electronics',
+    subjects: [
+      'Circuit Theory', 'Electrical Machines', 'Power Systems', 'Control Systems',
+      'Power Electronics', 'Digital Signal Processing', 'Instrumentation', 'Renewable Energy',
+      'High Voltage Engineering', 'Electric Drives', 'Power Quality', 'Smart Grid'
+    ],
+    toolsAvailable: ['Circuit Simulator', 'Power System Analyzer', 'Control System Designer']
+  }
+];
+
+const subjects = [
+  // CSE Subjects
+  { branchCode: 'CSE', subjectCode: 'CS101', subjectName: 'Programming Fundamentals', semester: 1, credits: 4, isCore: true },
+  { branchCode: 'CSE', subjectCode: 'CS201', subjectName: 'Data Structures', semester: 2, credits: 4, isCore: true },
+  { branchCode: 'CSE', subjectCode: 'CS301', subjectName: 'Algorithms', semester: 3, credits: 4, isCore: true },
+  { branchCode: 'CSE', subjectCode: 'CS401', subjectName: 'Database Management', semester: 4, credits: 3, isCore: true },
+  { branchCode: 'CSE', subjectCode: 'CS501', subjectName: 'Operating Systems', semester: 5, credits: 4, isCore: true },
+  { branchCode: 'CSE', subjectCode: 'CS601', subjectName: 'Computer Networks', semester: 6, credits: 3, isCore: true },
+  { branchCode: 'CSE', subjectCode: 'CS701', subjectName: 'Machine Learning', semester: 7, credits: 3, isCore: false },
+  { branchCode: 'CSE', subjectCode: 'CS801', subjectName: 'Software Engineering', semester: 8, credits: 3, isCore: true },
+  
+  // ECE Subjects
+  { branchCode: 'ECE', subjectCode: 'EC101', subjectName: 'Circuit Analysis', semester: 1, credits: 4, isCore: true },
+  { branchCode: 'ECE', subjectCode: 'EC201', subjectName: 'Electronic Devices', semester: 2, credits: 4, isCore: true },
+  { branchCode: 'ECE', subjectCode: 'EC301', subjectName: 'Digital Electronics', semester: 3, credits: 4, isCore: true },
+  { branchCode: 'ECE', subjectCode: 'EC401', subjectName: 'Signal Processing', semester: 4, credits: 3, isCore: true },
+  { branchCode: 'ECE', subjectCode: 'EC501', subjectName: 'Communication Systems', semester: 5, credits: 4, isCore: true },
+  { branchCode: 'ECE', subjectCode: 'EC601', subjectName: 'Microprocessors', semester: 6, credits: 3, isCore: true },
+  { branchCode: 'ECE', subjectCode: 'EC701', subjectName: 'VLSI Design', semester: 7, credits: 3, isCore: false },
+  { branchCode: 'ECE', subjectCode: 'EC801', subjectName: 'Embedded Systems', semester: 8, credits: 3, isCore: true },
+  
+  // MECH Subjects
+  { branchCode: 'MECH', subjectCode: 'ME101', subjectName: 'Engineering Mechanics', semester: 1, credits: 4, isCore: true },
+  { branchCode: 'MECH', subjectCode: 'ME201', subjectName: 'Thermodynamics', semester: 2, credits: 4, isCore: true },
+  { branchCode: 'MECH', subjectCode: 'ME301', subjectName: 'Fluid Mechanics', semester: 3, credits: 4, isCore: true },
+  { branchCode: 'MECH', subjectCode: 'ME401', subjectName: 'Heat Transfer', semester: 4, credits: 3, isCore: true },
+  { branchCode: 'MECH', subjectCode: 'ME501', subjectName: 'Manufacturing Processes', semester: 5, credits: 4, isCore: true },
+  { branchCode: 'MECH', subjectCode: 'ME601', subjectName: 'Machine Design', semester: 6, credits: 3, isCore: true },
+  { branchCode: 'MECH', subjectCode: 'ME701', subjectName: 'Automotive Engineering', semester: 7, credits: 3, isCore: false },
+  { branchCode: 'MECH', subjectCode: 'ME801', subjectName: 'Industrial Engineering', semester: 8, credits: 3, isCore: true },
+  
+  // CIVIL Subjects
+  { branchCode: 'CIVIL', subjectCode: 'CE101', subjectName: 'Engineering Mechanics', semester: 1, credits: 4, isCore: true },
+  { branchCode: 'CIVIL', subjectCode: 'CE201', subjectName: 'Structural Analysis', semester: 2, credits: 4, isCore: true },
+  { branchCode: 'CIVIL', subjectCode: 'CE301', subjectName: 'Concrete Technology', semester: 3, credits: 4, isCore: true },
+  { branchCode: 'CIVIL', subjectCode: 'CE401', subjectName: 'Soil Mechanics', semester: 4, credits: 3, isCore: true },
+  { branchCode: 'CIVIL', subjectCode: 'CE501', subjectName: 'Transportation Engineering', semester: 5, credits: 4, isCore: true },
+  { branchCode: 'CIVIL', subjectCode: 'CE601', subjectName: 'Water Resources', semester: 6, credits: 3, isCore: true },
+  { branchCode: 'CIVIL', subjectCode: 'CE701', subjectName: 'Environmental Engineering', semester: 7, credits: 3, isCore: false },
+  { branchCode: 'CIVIL', subjectCode: 'CE801', subjectName: 'Construction Management', semester: 8, credits: 3, isCore: true },
+  
+  // EEE Subjects
+  { branchCode: 'EEE', subjectCode: 'EE101', subjectName: 'Circuit Theory', semester: 1, credits: 4, isCore: true },
+  { branchCode: 'EEE', subjectCode: 'EE201', subjectName: 'Electrical Machines', semester: 2, credits: 4, isCore: true },
+  { branchCode: 'EEE', subjectCode: 'EE301', subjectName: 'Power Systems', semester: 3, credits: 4, isCore: true },
+  { branchCode: 'EEE', subjectCode: 'EE401', subjectName: 'Control Systems', semester: 4, credits: 3, isCore: true },
+  { branchCode: 'EEE', subjectCode: 'EE501', subjectName: 'Power Electronics', semester: 5, credits: 4, isCore: true },
+  { branchCode: 'EEE', subjectCode: 'EE601', subjectName: 'Instrumentation', semester: 6, credits: 3, isCore: true },
+  { branchCode: 'EEE', subjectCode: 'EE701', subjectName: 'Renewable Energy', semester: 7, credits: 3, isCore: false },
+  { branchCode: 'EEE', subjectCode: 'EE801', subjectName: 'Smart Grid', semester: 8, credits: 3, isCore: true }
+];
+
+async function seedBranches() {
+  try {
+    console.log('🌱 Seeding engineering branches...');
+    
+    // Insert branches
+    for (const branch of branches) {
+      try {
+        await db.execute(`
+          INSERT INTO engineering_branches (branch_code, branch_name, description, subjects, tools_available, created_at)
+          VALUES ($1, $2, $3, $4, $5, $6)
+          ON CONFLICT (branch_code) DO NOTHING
+        `, [
+          branch.branchCode,
+          branch.branchName,
+          branch.description,
+          JSON.stringify(branch.subjects),
+          JSON.stringify(branch.toolsAvailable),
+          new Date().toISOString()
+        ]);
+        console.log(`✅ Added branch: ${branch.branchName}`);
+      } catch (error) {
+        console.log(`⚠️  Branch ${branch.branchCode} already exists or error:`, error.message);
+      }
+    }
+    
+    // Insert subjects
+    for (const subject of subjects) {
+      try {
+        await db.execute(`
+          INSERT INTO branch_subjects (branch_code, subject_code, subject_name, semester, credits, is_core, prerequisites, syllabus)
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          ON CONFLICT (branch_code, subject_code) DO NOTHING
+        `, [
+          subject.branchCode,
+          subject.subjectCode,
+          subject.subjectName,
+          subject.semester,
+          subject.credits,
+          subject.isCore,
+          JSON.stringify([]),
+          JSON.stringify({})
+        ]);
+        console.log(`✅ Added subject: ${subject.subjectName} (${subject.subjectCode})`);
+      } catch (error) {
+        console.log(`⚠️  Subject ${subject.subjectCode} already exists or error:`, error.message);
+      }
+    }
+    
+    console.log('🎉 Engineering branches and subjects seeded successfully!');
+  } catch (error) {
+    console.error('❌ Error seeding branches:', error);
+  }
+}
+
+// Run the seeding function
+seedBranches().then(() => {
+  console.log('✨ Seeding completed!');
+  process.exit(0);
+}).catch((error) => {
+  console.error('💥 Seeding failed:', error);
+  process.exit(1);
+});
