@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { Button } from '../../../../components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/card'
@@ -23,7 +23,7 @@ import Link from 'next/link'
 import axios from 'axios'
 import { toast } from 'sonner'
 
-function MockExamsPage() {
+function MockExamsContent() {
   const searchParams = useSearchParams()
   const branchCode = searchParams.get('branch')
   
@@ -427,6 +427,21 @@ function MockExamsPage() {
         </Card>
       )}
     </div>
+  )
+}
+
+function MockExamsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <p className="text-gray-600">Loading mock exams...</p>
+        </div>
+      </div>
+    }>
+      <MockExamsContent />
+    </Suspense>
   )
 }
 

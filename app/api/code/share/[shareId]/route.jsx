@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { currentUser } from "@clerk/nextjs/server";
-import { db } from '../../../../../config/db.js';
+import { db } from '../../../../../config/db.jsx';
 import { sharedCodesTable } from '../../../../../config/schema.js';
 import { eq, and } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
