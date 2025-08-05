@@ -245,6 +245,44 @@ const questionSchema = {
 - Error rate tracking
 - User interaction analytics (non-privacy invasive)
 
+### 6. URL Configuration Service
+
+#### Base URL Detection
+```javascript
+class URLService {
+  static getBaseURL() {
+    // Check for explicit environment variable first
+    if (process.env.NEXT_PUBLIC_BASE_URL) {
+      return process.env.NEXT_PUBLIC_BASE_URL;
+    }
+    
+    // In production, use Vercel URL
+    if (process.env.VERCEL_URL) {
+      return `https://${process.env.VERCEL_URL}`;
+    }
+    
+    // Fallback to localhost for development
+    return process.env.NODE_ENV === 'production' 
+      ? 'https://online-learning-platform-ashy.vercel.app'
+      : 'http://localhost:3000';
+  }
+  
+  static generateShareURL(shareId) {
+    const baseURL = this.getBaseURL();
+    return `${baseURL}/share/${shareId}`;
+  }
+}
+```
+
+#### Environment Configuration
+```javascript
+// .env.local (for development)
+NEXT_PUBLIC_BASE_URL=http://localhost:3000
+
+// .env.production (for production)
+NEXT_PUBLIC_BASE_URL=https://online-learning-platform-ashy.vercel.app
+```
+
 ## Security Considerations
 
 ### Data Protection

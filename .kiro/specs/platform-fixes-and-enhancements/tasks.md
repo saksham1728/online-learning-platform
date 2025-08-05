@@ -107,7 +107,6 @@
   - Implement input validation for file uploads and AI requests
   - Create consistent error response format across APIs
   - Add client-side error handling and user feedback
-
   - _Requirements: 6.5, 8.4_
 
 - [x] 15. Update Public Code Viewer Component
@@ -118,10 +117,19 @@
   - Test shared code viewing functionality end-to-end
   - _Requirements: 8.1, 8.2, 2.1, 2.4_
 
-- [ ] 16. Test and Validate All Changes
+- [x] 16. Fix Shared Code URL Generation
+  - Create URLService utility class for base URL detection
+  - Update environment configuration to include NEXT_PUBLIC_BASE_URL
+  - Modify code sharing components to use production URLs
+  - Implement automatic domain detection for production vs development
+  - Test URL generation in both local and production environments
+  - _Requirements: 10.1, 10.2, 10.3, 10.4, 10.5_
+
+- [ ] 17. Test and Validate All Changes
   - Test shared code creation and viewing workflow
   - Validate question papers display shows all branches
   - Test notes download and question extraction functionality
   - Verify navigation changes and removed features
+  - Test URL generation with correct production domain
   - Perform end-to-end testing of all modified features
   - _Requirements: All requirements validation_

@@ -47,7 +47,7 @@ export async function GET(req) {
     const formattedCodes = sharedCodes.map(code => ({
       ...code,
       tags: safeJsonParse(code.tags, []),
-      shareUrl: `/share/${code.shareId}`
+      shareUrl: require('../../../../lib/urlService').generateShareURL(code.shareId)
     }));
 
     return NextResponse.json({

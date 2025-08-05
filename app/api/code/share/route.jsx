@@ -81,8 +81,9 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Failed to create shared code' }, { status: 500 });
     }
 
-    // Generate share URL
-    const shareUrl = `${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/share/${shareId}`;
+    // Generate share URL using URLService
+    const URLService = require('../../../../lib/urlService');
+    const shareUrl = URLService.generateShareURL(shareId);
 
     console.log('Shared code created successfully:', shareId);
 

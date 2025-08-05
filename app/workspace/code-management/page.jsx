@@ -80,7 +80,8 @@ function CodeManagement() {
 
   const handleCopyLink = async (code) => {
     try {
-      const fullUrl = `${window.location.origin}${code.shareUrl}`
+      // shareUrl now contains the complete URL from the API
+      const fullUrl = code.shareUrl.startsWith('http') ? code.shareUrl : `${window.location.origin}${code.shareUrl}`
       await navigator.clipboard.writeText(fullUrl)
       toast.success('Share link copied to clipboard!')
     } catch (error) {

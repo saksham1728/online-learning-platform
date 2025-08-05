@@ -104,3 +104,15 @@ This document outlines the requirements for fixing critical issues in the educat
 2. WHEN users try to comment THEN the system SHALL process comments without errors
 3. WHEN the comment system loads THEN the system SHALL integrate seamlessly with the code viewer
 4. WHEN comments are submitted THEN the system SHALL store and display them properly
+
+### Requirement 10: Fix Shared Code URL Generation
+
+**User Story:** As a user sharing code, I want the shared URLs to use the correct production domain instead of localhost, so that others can access my shared code from anywhere.
+
+#### Acceptance Criteria
+
+1. WHEN code is shared THEN the system SHALL generate URLs using the production domain (https://online-learning-platform-ashy.vercel.app)
+2. WHEN the application is running in production THEN the system SHALL NOT use localhost URLs
+3. WHEN the application is running locally THEN the system SHALL use localhost URLs for development
+4. WHEN environment variables are configured THEN the system SHALL use NEXT_PUBLIC_BASE_URL or similar for URL generation
+5. WHEN no base URL is configured THEN the system SHALL automatically detect the correct domain from request headers

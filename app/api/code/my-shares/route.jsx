@@ -85,7 +85,7 @@ export async function GET(req) {
     const processedShares = shares.map(share => ({
       ...share,
       tags: JSON.parse(share.tags || '[]'),
-      shareUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/share/${share.shareId}`,
+      shareUrl: require('../../../../lib/urlService').generateShareURL(share.shareId),
       isExpired: share.expiresAt ? new Date(share.expiresAt) < new Date() : false
     }));
 

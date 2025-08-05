@@ -41,7 +41,7 @@ export async function GET(req, { params }) {
     const shareData = {
       ...share[0],
       tags,
-      shareUrl: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/share/${shareId}`,
+      shareUrl: require('../../../../../lib/urlService').generateShareURL(shareId),
       isExpired: share[0].expiresAt ? new Date(share[0].expiresAt) < new Date() : false
     };
 
