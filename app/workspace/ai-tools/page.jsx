@@ -45,14 +45,14 @@ function AITools() {
   ]
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 px-4 sm:px-6 py-4 sm:py-6">
       {/* Header */}
-      <div className="text-center space-y-4">
+      <div className="text-center space-y-3 sm:space-y-4">
         <div className="flex items-center justify-center space-x-2">
-          <Brain className="h-8 w-8 text-primary" />
-          <h1 className="text-4xl font-bold">AI Tools</h1>
+          <Brain className="h-6 w-6 sm:h-8 sm:w-8 text-primary" />
+          <h1 className="text-2xl sm:text-4xl font-bold">AI Tools</h1>
         </div>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-base sm:text-xl text-gray-600 max-w-2xl mx-auto px-4">
           Enhance your learning experience with powerful AI-driven tools for quiz generation, practice, and performance analysis.
         </p>
       </div>
@@ -61,29 +61,10 @@ function AITools() {
       <QuickActions />
 
       {/* Tools Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {aiTools.map((tool) => (
           <ToolCard key={tool.id} tool={tool} />
         ))}
-      </div>
-
-      {/* Stats Section */}
-      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
-        <h2 className="text-2xl font-bold text-center mb-6">Your AI Tools Usage</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="text-center">
-            <div className="text-3xl font-bold text-blue-600">0</div>
-            <div className="text-gray-600">Quizzes Created</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-green-600">0</div>
-            <div className="text-gray-600">Practice Sessions</div>
-          </div>
-          <div className="text-center">
-            <div className="text-3xl font-bold text-purple-600">0%</div>
-            <div className="text-gray-600">Average Score</div>
-          </div>
-        </div>
       </div>
     </div>
   )
