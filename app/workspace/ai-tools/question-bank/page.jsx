@@ -22,7 +22,10 @@ function QuestionBank() {
   const [selectedCategory, setSelectedCategory] = useState('all')
   const [selectedDifficulty, setSelectedDifficulty] = useState('all')
   const [showCreateModal, setShowCreateModal] = useState(false)
+  const [showViewModal, setShowViewModal] = useState(false)
+  const [selectedBank, setSelectedBank] = useState(null)
   const [generating, setGenerating] = useState(false)
+  const [deleting, setDeleting] = useState({})
   const [formData, setFormData] = useState({
     topic: '',
     description: '',
@@ -154,23 +157,66 @@ function QuestionBank() {
     }
 
     try {
+      setDeleting(prev => ({ ...prev, [bankId]: true }))
       await axios.delete(`/api/question-banks/${bankId}`)
       toast.success('Question bank deleted successfully')
       loadQuestionBanks()
     } catch (error) {
       console.error('Failed to delete question bank:', error)
       toast.error('Failed to delete question bank')
+    } finally {
+      setDeleting(prev => ({ ...prev, [bankId]: false }))
     }
   }
 
-  const handleViewBank = (bank) => {
-    // Navigate to detailed view (to be implemented)
-    toast.info(`Viewing ${bank.topic} question bank...`)
+  const handleViewBank = async (bank) => {
+    try {
+      // Fetch the full question bank details
+      const response = await axios.get(`/api/question-banks/${bank.id}`)
+      if (response.data.success) {
+        setSelectedBank(response.data.questionBank)
+        setShowViewModal(true)
+      } else {
+        toast.error('Failed to load question bank details')
+      }
+    } catch (error) {
+      console.error('Failed to load question bank:', error)
+      toast.error('Failed to load question bank details')
+    }
   }
 
   const handleDownloadBank = (bank) => {
-    // Download functionality (to be implemented)
-    toast.info(`Downloading ${bank.topic} question bank...`)
+    try {
+      // Create downloadable content
+      const exportData = {
+        topic: bank.topic,
+        description: bank.description,
+        category: bank.category,
+        difficulty: bank.difficulty,
+        questionCount: bank.questions?.length || 0,
+        createdAt: bank.createdAt,
+        questions: bank.questions || []
+      }
+
+      // Convert to JSON string
+      const dataStr = JSON.stringify(exportData, null, 2)
+      const dataBlob = new Blob([dataStr], { type: 'application/json' })
+      
+      // Create download link
+      const url = URL.createObjectURL(dataBlob)
+      const link = document.createElement('a')
+      link.href = url
+      link.download = `${bank.topic.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_question_bank.json`
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+      URL.revokeObjectURL(url)
+      
+      toast.success(`Downloaded ${bank.topic} question bank!`)
+    } catch (error) {
+      console.error('Failed to download question bank:', error)
+      toast.error('Failed to download question bank')
+    }
   }
 
   const getDifficultyColor = (difficulty) => {
@@ -346,9 +392,19 @@ function QuestionBank() {
                   variant="destructive"
                   onClick={() => handleDeleteBank(bank.id, bank.topic)}
                   className="w-full"
+                  disabled={deleting[bank.id]}
                 >
-                  <Trash2 className="h-4 w-4 mr-2" />
-                  Delete
+                  {deleting[bank.id] ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="h-4 w-4 mr-2" />
+                      Delete
+                    </>
+                  )}
                 </Button>
               </CardContent>
             </Card>
@@ -495,6 +551,103 @@ function QuestionBank() {
                   Generate Questions
                 </>
               )}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* View Question Bank Modal */}
+      <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center space-x-2">
+              <BookOpen className="h-5 w-5" />
+              <span>{selectedBank?.topic}</span>
+            </DialogTitle>
+            <DialogDescription>
+              {selectedBank?.description && (
+                <span>{selectedBank.description}</span>
+              )}
+              <div className="flex items-center space-x-4 mt-2">
+                <Badge variant="outline">{selectedBank?.category}</Badge>
+                <Badge className={getDifficultyColor(selectedBank?.difficulty)}>
+                  {selectedBank?.difficulty}
+                </Badge>
+                <span className="text-sm text-gray-600">
+                  {selectedBank?.questions?.length || 0} questions
+                </span>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-4 max-h-[60vh] overflow-y-auto">
+            {selectedBank?.questions?.map((question, index) => (
+              <Card key={question.id || index} className="border-l-4 border-l-blue-500">
+                <CardHeader className="pb-3">
+                  <div className="flex items-start justify-between">
+                    <CardTitle className="text-base font-medium">
+                      Question {index + 1}
+                    </CardTitle>
+                    <Badge variant="outline" className="text-xs">
+                      {question.type || 'multiple-choice'}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <p className="font-medium text-gray-900">
+                    {question.question}
+                  </p>
+                  
+                  {question.options && question.options.length > 0 && (
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-gray-700">Options:</p>
+                      <div className="grid grid-cols-1 gap-2">
+                        {question.options.map((option, optionIndex) => {
+                          const optionLetter = String.fromCharCode(65 + optionIndex); // A, B, C, D
+                          const isCorrect = question.correctAnswer === optionLetter;
+                          return (
+                            <div 
+                              key={optionIndex}
+                              className={`p-2 rounded border text-sm ${
+                                isCorrect 
+                                  ? 'bg-green-50 border-green-200 text-green-800' 
+                                  : 'bg-gray-50 border-gray-200'
+                              }`}
+                            >
+                              <span className="font-medium">{optionLetter}.</span> {option}
+                              {isCorrect && (
+                                <span className="ml-2 text-green-600 font-medium">✓ Correct</span>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {question.explanation && (
+                    <div className="bg-blue-50 border border-blue-200 rounded p-3">
+                      <p className="text-sm font-medium text-blue-800 mb-1">Explanation:</p>
+                      <p className="text-sm text-blue-700">{question.explanation}</p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <div className="flex justify-between pt-4 border-t">
+            <div className="flex space-x-2">
+              <Button 
+                variant="outline" 
+                onClick={() => selectedBank && handleDownloadBank(selectedBank)}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Export Questions
+              </Button>
+            </div>
+            <Button variant="outline" onClick={() => setShowViewModal(false)}>
+              Close
             </Button>
           </div>
         </DialogContent>
