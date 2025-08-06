@@ -37,7 +37,7 @@ export async function POST(req) {
     console.log('Generating question bank:', { topic, difficulty, questionCount });
 
     // Initialize Gemini AI
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
     // Build the prompt for question generation
     const prompt = buildQuestionGenerationPrompt(
