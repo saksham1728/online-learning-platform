@@ -38,6 +38,15 @@ function KnowledgeDating() {
   const cardRef = useRef(null);
   const { user } = useUser();
 
+  // Touch/Swipe handling
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragOffset, setDragOffset] = useState(0);
+
+  // Minimum swipe distance (in px)
+  const minSwipeDistance = 50;
+
   useEffect(() => {
     if (user) {
       loadCards();
@@ -129,6 +138,46 @@ function KnowledgeDating() {
   const handleCloseDetails = () => {
     setShowDetails(false);
     setDetailsData(null);
+  };
+
+  // Touch event handlers for swipe functionality
+  const onTouchStart = (e) => {
+    setTouchEnd(null); // otherwise the swipe is fired even with usual touch events
+    setTouchStart(e.targetTouches[0].clientX);
+    setIsDragging(true);
+  };
+
+  const onTouchMove = (e) => {
+    if (!isDragging || !touchStart) return;
+    
+    const currentTouch = e.targetTouches[0].clientX;
+    const diff = currentTouch - touchStart;
+    
+    // Update drag offset for visual feedback
+    setDragOffset(diff);
+    setTouchEnd(currentTouch);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd || !isDragging) {
+      setIsDragging(false);
+      setDragOffset(0);
+      return;
+    }
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    // Reset drag state
+    setIsDragging(false);
+    setDragOffset(0);
+
+    if (isLeftSwipe) {
+      handleSwipe("left");
+    } else if (isRightSwipe) {
+      handleSwipe("right");
+    }
   };
 
   const getDifficultyColor = (difficulty) => {
@@ -236,13 +285,62 @@ function KnowledgeDating() {
                   ? "translate-x-full rotate-12 opacity-0"
                   : swipeDirection === "left"
                   ? "-translate-x-full -rotate-12 opacity-0"
+                  : isDragging
+                  ? "transition-none"
                   : ""
               }`}
               style={{
                 background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                 color: "white",
+                transform: isDragging 
+                  ? `translateX(${dragOffset}px) rotate(${dragOffset * 0.1}deg)` 
+                  : swipeDirection === "right"
+                  ? "translateX(100%) rotate(12deg)"
+                  : swipeDirection === "left"
+                  ? "translateX(-100%) rotate(-12deg)"
+                  : "translateX(0) rotate(0deg)",
+                opacity: isDragging 
+                  ? Math.max(0.7, 1 - Math.abs(dragOffset) / 300)
+                  : swipeDirection 
+                  ? 0 
+                  : 1,
               }}
+              onTouchStart={onTouchStart}
+              onTouchMove={onTouchMove}
+              onTouchEnd={onTouchEnd}
             >
+              {/* Swipe Direction Indicators */}
+              {isDragging && (
+                <>
+                  {/* Like Indicator (Right Swipe) */}
+                  <div 
+                    className={`absolute top-1/2 left-8 transform -translate-y-1/2 transition-all duration-200 ${
+                      dragOffset > 30 ? 'opacity-100 scale-110' : 'opacity-0 scale-90'
+                    }`}
+                  >
+                    <div className="bg-green-500 text-white rounded-full p-3 shadow-lg">
+                      <Heart className="h-8 w-8" fill="currentColor" />
+                    </div>
+                    <div className="text-green-500 font-bold text-lg mt-2 text-center">
+                      LIKE
+                    </div>
+                  </div>
+
+                  {/* Skip Indicator (Left Swipe) */}
+                  <div 
+                    className={`absolute top-1/2 right-8 transform -translate-y-1/2 transition-all duration-200 ${
+                      dragOffset < -30 ? 'opacity-100 scale-110' : 'opacity-0 scale-90'
+                    }`}
+                  >
+                    <div className="bg-red-500 text-white rounded-full p-3 shadow-lg">
+                      <X className="h-8 w-8" />
+                    </div>
+                    <div className="text-red-500 font-bold text-lg mt-2 text-center">
+                      SKIP
+                    </div>
+                  </div>
+                </>
+              )}
               <CardHeader className="text-center pb-3 sm:pb-4 px-4 sm:px-6 pt-4 sm:pt-6">
                 <div className="flex items-center justify-between mb-3 sm:mb-4">
                   <Badge className={`text-xs sm:text-sm ${getDifficultyColor(currentCard.difficulty)}`}>

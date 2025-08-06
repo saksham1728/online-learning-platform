@@ -1,58 +1,86 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { ArrowLeft, BookOpen, Plus, Search, Filter, Trash2, Download, Eye, Sparkles, Brain } from 'lucide-react';
-import Link from 'next/link';
-import { Button } from '../../../../components/ui/button';
-import { Input } from '../../../../components/ui/input';
-import { Textarea } from '../../../../components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/card';
-import { Badge } from '../../../../components/ui/badge';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../../../../components/ui/dialog';
-import { Label } from '../../../../components/ui/label';
-import { useUser } from '@clerk/nextjs';
-import axios from 'axios';
-import { toast } from 'sonner';
+import React, { useState, useEffect } from "react";
+import {
+  ArrowLeft,
+  BookOpen,
+  Plus,
+  Search,
+  Filter,
+  Trash2,
+  Download,
+  Eye,
+  Sparkles,
+  Brain,
+} from "lucide-react";
+import Link from "next/link";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
+import { Textarea } from "../../../../components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../../../components/ui/card";
+import { Badge } from "../../../../components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../../components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "../../../../components/ui/dialog";
+import { Label } from "../../../../components/ui/label";
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+import { toast } from "sonner";
 
 export default function QuestionBank() {
   const [questionBanks, setQuestionBanks] = useState([]);
   const [filteredBanks, setFilteredBanks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [selectedDifficulty, setSelectedDifficulty] = useState("all");
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [selectedBank, setSelectedBank] = useState(null);
   const [generating, setGenerating] = useState(false);
   const [deleting, setDeleting] = useState({});
   const [formData, setFormData] = useState({
-    topic: '',
-    description: '',
-    category: 'general',
-    difficulty: 'medium',
+    topic: "",
+    description: "",
+    category: "general",
+    difficulty: "medium",
     questionCount: 10,
-    questionTypes: ['multiple-choice']
+    questionTypes: ["multiple-choice"],
   });
   const { user } = useUser();
 
   const categories = [
-    { value: 'general', label: 'General' },
-    { value: 'computer-science', label: 'Computer Science' },
-    { value: 'mathematics', label: 'Mathematics' },
-    { value: 'physics', label: 'Physics' },
-    { value: 'chemistry', label: 'Chemistry' },
-    { value: 'biology', label: 'Biology' },
-    { value: 'engineering', label: 'Engineering' },
-    { value: 'business', label: 'Business' },
-    { value: 'history', label: 'History' },
-    { value: 'literature', label: 'Literature' }
+    { value: "general", label: "General" },
+    { value: "computer-science", label: "Computer Science" },
+    { value: "mathematics", label: "Mathematics" },
+    { value: "physics", label: "Physics" },
+    { value: "chemistry", label: "Chemistry" },
+    { value: "biology", label: "Biology" },
+    { value: "engineering", label: "Engineering" },
+    { value: "business", label: "Business" },
+    { value: "history", label: "History" },
+    { value: "literature", label: "Literature" },
   ];
 
   const difficulties = [
-    { value: 'easy', label: 'Easy' },
-    { value: 'medium', label: 'Medium' },
-    { value: 'hard', label: 'Hard' }
+    { value: "easy", label: "Easy" },
+    { value: "medium", label: "Medium" },
+    { value: "hard", label: "Hard" },
   ];
 
   useEffect(() => {
@@ -68,12 +96,12 @@ export default function QuestionBank() {
   const loadQuestionBanks = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/question-banks');
+      const response = await axios.get("/api/question-banks");
       if (response.data.success) {
         setQuestionBanks(response.data.questionBanks || []);
       }
     } catch (error) {
-      console.error('Failed to load question banks:', error);
+      console.error("Failed to load question banks:", error);
       setQuestionBanks([]);
     } finally {
       setLoading(false);
@@ -84,18 +112,21 @@ export default function QuestionBank() {
     let filtered = questionBanks;
 
     if (searchTerm) {
-      filtered = filtered.filter(bank => 
-        bank.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        bank.description?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (bank) =>
+          bank.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          bank.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    if (selectedCategory !== 'all') {
-      filtered = filtered.filter(bank => bank.category === selectedCategory);
+    if (selectedCategory !== "all") {
+      filtered = filtered.filter((bank) => bank.category === selectedCategory);
     }
 
-    if (selectedDifficulty !== 'all') {
-      filtered = filtered.filter(bank => bank.difficulty === selectedDifficulty);
+    if (selectedDifficulty !== "all") {
+      filtered = filtered.filter(
+        (bank) => bank.difficulty === selectedDifficulty
+      );
     }
 
     setFilteredBanks(filtered);
@@ -103,61 +134,67 @@ export default function QuestionBank() {
 
   const handleCreateQuestionBank = async () => {
     if (!formData.topic.trim()) {
-      toast.error('Please enter a topic for the question bank');
+      toast.error("Please enter a topic for the question bank");
       return;
     }
 
     try {
       setGenerating(true);
-      toast.info('Generating questions using AI...');
+      toast.info("Generating questions using AI...");
 
-      const response = await axios.post('/api/question-banks/generate', {
+      const response = await axios.post("/api/question-banks/generate", {
         topic: formData.topic.trim(),
         description: formData.description.trim(),
         category: formData.category,
         difficulty: formData.difficulty,
         questionCount: formData.questionCount,
-        questionTypes: formData.questionTypes
+        questionTypes: formData.questionTypes,
       });
 
       if (response.data.success) {
-        toast.success(`Successfully generated ${response.data.questionBank.questions.length} questions!`);
+        toast.success(
+          `Successfully generated ${response.data.questionBank.questions.length} questions!`
+        );
         setShowCreateModal(false);
         setFormData({
-          topic: '',
-          description: '',
-          category: 'general',
-          difficulty: 'medium',
+          topic: "",
+          description: "",
+          category: "general",
+          difficulty: "medium",
           questionCount: 10,
-          questionTypes: ['multiple-choice']
+          questionTypes: ["multiple-choice"],
         });
         loadQuestionBanks();
       } else {
-        toast.error('Failed to generate question bank');
+        toast.error("Failed to generate question bank");
       }
     } catch (error) {
-      console.error('Failed to generate question bank:', error);
-      toast.error('Failed to generate question bank');
+      console.error("Failed to generate question bank:", error);
+      toast.error("Failed to generate question bank");
     } finally {
       setGenerating(false);
     }
   };
 
   const handleDeleteBank = async (bankId, topic) => {
-    if (!confirm(`Are you sure you want to delete the question bank "${topic}"? This action cannot be undone.`)) {
+    if (
+      !confirm(
+        `Are you sure you want to delete the question bank "${topic}"? This action cannot be undone.`
+      )
+    ) {
       return;
     }
 
     try {
-      setDeleting(prev => ({ ...prev, [bankId]: true }));
+      setDeleting((prev) => ({ ...prev, [bankId]: true }));
       await axios.delete(`/api/question-banks/${bankId}`);
-      toast.success('Question bank deleted successfully');
+      toast.success("Question bank deleted successfully");
       loadQuestionBanks();
     } catch (error) {
-      console.error('Failed to delete question bank:', error);
-      toast.error('Failed to delete question bank');
+      console.error("Failed to delete question bank:", error);
+      toast.error("Failed to delete question bank");
     } finally {
-      setDeleting(prev => ({ ...prev, [bankId]: false }));
+      setDeleting((prev) => ({ ...prev, [bankId]: false }));
     }
   };
 
@@ -168,11 +205,11 @@ export default function QuestionBank() {
         setSelectedBank(response.data.questionBank);
         setShowViewModal(true);
       } else {
-        toast.error('Failed to load question bank details');
+        toast.error("Failed to load question bank details");
       }
     } catch (error) {
-      console.error('Failed to load question bank:', error);
-      toast.error('Failed to load question bank details');
+      console.error("Failed to load question bank:", error);
+      toast.error("Failed to load question bank details");
     }
   };
 
@@ -185,49 +222,65 @@ export default function QuestionBank() {
         difficulty: bank.difficulty,
         questionCount: bank.questions?.length || 0,
         createdAt: bank.createdAt,
-        questions: bank.questions || []
+        questions: bank.questions || [],
       };
 
       const dataStr = JSON.stringify(exportData, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      
+      const dataBlob = new Blob([dataStr], { type: "application/json" });
+
       const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.download = `${bank.topic.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_question_bank.json`;
+      link.download = `${bank.topic
+        .replace(/[^a-z0-9]/gi, "_")
+        .toLowerCase()}_question_bank.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       toast.success(`Downloaded ${bank.topic} question bank!`);
     } catch (error) {
-      console.error('Failed to download question bank:', error);
-      toast.error('Failed to download question bank');
+      console.error("Failed to download question bank:", error);
+      toast.error("Failed to download question bank");
     }
   };
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800';
-      case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'hard': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case "easy":
+        return "bg-green-100 text-green-800";
+      case "medium":
+        return "bg-yellow-100 text-yellow-800";
+      case "hard":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
     }
   };
 
   const getCategoryIcon = (category) => {
     switch (category) {
-      case 'computer-science': return '💻';
-      case 'mathematics': return '🔢';
-      case 'physics': return '⚛️';
-      case 'chemistry': return '🧪';
-      case 'biology': return '🧬';
-      case 'engineering': return '⚙️';
-      case 'business': return '💼';
-      case 'history': return '📚';
-      case 'literature': return '📖';
-      default: return '📝';
+      case "computer-science":
+        return "💻";
+      case "mathematics":
+        return "🔢";
+      case "physics":
+        return "⚛️";
+      case "chemistry":
+        return "🧪";
+      case "biology":
+        return "🧬";
+      case "engineering":
+        return "⚙️";
+      case "business":
+        return "💼";
+      case "history":
+        return "📚";
+      case "literature":
+        return "📖";
+      default:
+        return "📝";
     }
   };
 
@@ -253,7 +306,10 @@ export default function QuestionBank() {
               Back to AI Tools
             </Button>
           </Link>
-          <Button onClick={() => setShowCreateModal(true)} className="w-full sm:w-auto">
+          <Button
+            onClick={() => setShowCreateModal(true)}
+            className="w-full sm:w-auto"
+          >
             <Plus className="h-4 w-4 mr-2" />
             Create Question Bank
           </Button>
@@ -279,14 +335,17 @@ export default function QuestionBank() {
                 className="pl-10"
               />
             </div>
-            
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+
+            <Select
+              value={selectedCategory}
+              onValueChange={setSelectedCategory}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Category" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {categories.map(category => (
+                {categories.map((category) => (
                   <SelectItem key={category.value} value={category.value}>
                     {getCategoryIcon(category.value)} {category.label}
                   </SelectItem>
@@ -294,13 +353,16 @@ export default function QuestionBank() {
               </SelectContent>
             </Select>
 
-            <Select value={selectedDifficulty} onValueChange={setSelectedDifficulty}>
+            <Select
+              value={selectedDifficulty}
+              onValueChange={setSelectedDifficulty}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select Difficulty" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Difficulties</SelectItem>
-                {difficulties.map(difficulty => (
+                {difficulties.map((difficulty) => (
                   <SelectItem key={difficulty.value} value={difficulty.value}>
                     {difficulty.label}
                   </SelectItem>
@@ -308,11 +370,14 @@ export default function QuestionBank() {
               </SelectContent>
             </Select>
 
-            <Button variant="outline" onClick={() => {
-              setSearchTerm('');
-              setSelectedCategory('all');
-              setSelectedDifficulty('all');
-            }}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSearchTerm("");
+                setSelectedCategory("all");
+                setSelectedDifficulty("all");
+              }}
+            >
               <Filter className="h-4 w-4 mr-2" />
               Clear Filters
             </Button>
@@ -329,7 +394,9 @@ export default function QuestionBank() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
-                      <span className="text-2xl">{getCategoryIcon(bank.category)}</span>
+                      <span className="text-2xl">
+                        {getCategoryIcon(bank.category)}
+                      </span>
                       <CardTitle className="text-lg">{bank.topic}</CardTitle>
                     </div>
                     <div className="flex items-center space-x-2 mb-2">
@@ -348,35 +415,28 @@ export default function QuestionBank() {
                     {bank.description}
                   </p>
                 )}
-                
+
                 <div className="flex items-center justify-between text-sm text-gray-600">
                   <span>{bank.questions?.length || 0} questions</span>
-                  <span>Created {new Date(bank.createdAt).toLocaleDateString()}</span>
+                  <span>
+                    Created {new Date(bank.createdAt).toLocaleDateString()}
+                  </span>
                 </div>
 
                 <div className="flex space-x-2">
-                  <Button 
-                    size="sm" 
-                    variant="outline" 
+                  <Button
+                    size="sm"
+                    variant="outline"
                     onClick={() => handleViewBank(bank)}
-                    className="flex-1"
+                    className="w-full"
                   >
                     <Eye className="h-4 w-4 mr-2" />
                     View
                   </Button>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => handleDownloadBank(bank)}
-                    className="flex-1"
-                  >
-                    <Download className="h-4 w-4 mr-2" />
-                    Export
-                  </Button>
                 </div>
 
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   variant="destructive"
                   onClick={() => handleDeleteBank(bank.id, bank.topic)}
                   className="w-full"
@@ -403,11 +463,15 @@ export default function QuestionBank() {
           <CardContent className="pt-6">
             <div className="text-center py-12">
               <BookOpen className="h-16 w-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">No Question Banks Found</h3>
+              <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                No Question Banks Found
+              </h3>
               <p className="text-gray-500 mb-4">
-                {searchTerm || selectedCategory !== 'all' || selectedDifficulty !== 'all'
-                  ? 'Try adjusting your filters to see more results.'
-                  : 'Create your first AI-generated question bank to get started.'}
+                {searchTerm ||
+                selectedCategory !== "all" ||
+                selectedDifficulty !== "all"
+                  ? "Try adjusting your filters to see more results."
+                  : "Create your first AI-generated question bank to get started."}
               </p>
               <Button onClick={() => setShowCreateModal(true)}>
                 <Plus className="h-4 w-4 mr-2" />
@@ -438,7 +502,9 @@ export default function QuestionBank() {
                 id="topic"
                 placeholder="e.g., JavaScript Fundamentals, Calculus, World War II..."
                 value={formData.topic}
-                onChange={(e) => setFormData({...formData, topic: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, topic: e.target.value })
+                }
               />
             </div>
 
@@ -448,7 +514,9 @@ export default function QuestionBank() {
                 id="description"
                 placeholder="Provide additional context or specific areas to focus on..."
                 value={formData.description}
-                onChange={(e) => setFormData({...formData, description: e.target.value})}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 rows={3}
               />
             </div>
@@ -456,12 +524,17 @@ export default function QuestionBank() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, category: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map(category => (
+                    {categories.map((category) => (
                       <SelectItem key={category.value} value={category.value}>
                         {getCategoryIcon(category.value)} {category.label}
                       </SelectItem>
@@ -472,13 +545,21 @@ export default function QuestionBank() {
 
               <div className="space-y-2">
                 <Label htmlFor="difficulty">Difficulty</Label>
-                <Select value={formData.difficulty} onValueChange={(value) => setFormData({...formData, difficulty: value})}>
+                <Select
+                  value={formData.difficulty}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, difficulty: value })
+                  }
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {difficulties.map(difficulty => (
-                      <SelectItem key={difficulty.value} value={difficulty.value}>
+                    {difficulties.map((difficulty) => (
+                      <SelectItem
+                        key={difficulty.value}
+                        value={difficulty.value}
+                      >
                         {difficulty.label}
                       </SelectItem>
                     ))}
@@ -489,9 +570,11 @@ export default function QuestionBank() {
 
             <div className="space-y-2">
               <Label htmlFor="questionCount">Number of Questions</Label>
-              <Select 
-                value={formData.questionCount.toString()} 
-                onValueChange={(value) => setFormData({...formData, questionCount: parseInt(value)})}
+              <Select
+                value={formData.questionCount.toString()}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, questionCount: parseInt(value) })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -510,11 +593,15 @@ export default function QuestionBank() {
             <div className="bg-blue-50 rounded-lg p-4">
               <div className="flex items-center space-x-2 mb-2">
                 <Sparkles className="h-4 w-4 text-blue-600" />
-                <span className="font-medium text-blue-800">AI Generation Preview</span>
+                <span className="font-medium text-blue-800">
+                  AI Generation Preview
+                </span>
               </div>
               <p className="text-sm text-blue-700">
-                AI will generate {formData.questionCount} {formData.difficulty} level questions about "{formData.topic || 'your topic'}" 
-                in the {categories.find(c => c.value === formData.category)?.label} category.
+                AI will generate {formData.questionCount} {formData.difficulty}{" "}
+                level questions about "{formData.topic || "your topic"}" in the{" "}
+                {categories.find((c) => c.value === formData.category)?.label}{" "}
+                category.
               </p>
             </div>
           </div>
@@ -523,8 +610,8 @@ export default function QuestionBank() {
             <Button variant="outline" onClick={() => setShowCreateModal(false)}>
               Cancel
             </Button>
-            <Button 
-              onClick={handleCreateQuestionBank} 
+            <Button
+              onClick={handleCreateQuestionBank}
               disabled={generating || !formData.topic.trim()}
             >
               {generating ? (
@@ -569,14 +656,17 @@ export default function QuestionBank() {
 
           <div className="space-y-4 max-h-[60vh] overflow-y-auto">
             {selectedBank?.questions?.map((question, index) => (
-              <Card key={question.id || index} className="border-l-4 border-l-blue-500">
+              <Card
+                key={question.id || index}
+                className="border-l-4 border-l-blue-500"
+              >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <CardTitle className="text-base font-medium">
                       Question {index + 1}
                     </CardTitle>
                     <Badge variant="outline" className="text-xs">
-                      {question.type || 'multiple-choice'}
+                      {question.type || "multiple-choice"}
                     </Badge>
                   </div>
                 </CardHeader>
@@ -584,26 +674,36 @@ export default function QuestionBank() {
                   <p className="font-medium text-gray-900">
                     {question.question}
                   </p>
-                  
+
                   {question.options && question.options.length > 0 && (
                     <div className="space-y-2">
-                      <p className="text-sm font-medium text-gray-700">Options:</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Options:
+                      </p>
                       <div className="grid grid-cols-1 gap-2">
                         {question.options.map((option, optionIndex) => {
-                          const optionLetter = String.fromCharCode(65 + optionIndex);
-                          const isCorrect = question.correctAnswer === optionLetter;
+                          const optionLetter = String.fromCharCode(
+                            65 + optionIndex
+                          );
+                          const isCorrect =
+                            question.correctAnswer === optionLetter;
                           return (
-                            <div 
+                            <div
                               key={optionIndex}
                               className={`p-2 rounded border text-sm ${
-                                isCorrect 
-                                  ? 'bg-green-50 border-green-200 text-green-800' 
-                                  : 'bg-gray-50 border-gray-200'
+                                isCorrect
+                                  ? "bg-green-50 border-green-200 text-green-800"
+                                  : "bg-gray-50 border-gray-200"
                               }`}
                             >
-                              <span className="font-medium">{optionLetter}.</span> {option}
+                              <span className="font-medium">
+                                {optionLetter}.
+                              </span>{" "}
+                              {option}
                               {isCorrect && (
-                                <span className="ml-2 text-green-600 font-medium">✓ Correct</span>
+                                <span className="ml-2 text-green-600 font-medium">
+                                  ✓ Correct
+                                </span>
                               )}
                             </div>
                           );
@@ -611,11 +711,15 @@ export default function QuestionBank() {
                       </div>
                     </div>
                   )}
-                  
+
                   {question.explanation && (
                     <div className="bg-blue-50 border border-blue-200 rounded p-3">
-                      <p className="text-sm font-medium text-blue-800 mb-1">Explanation:</p>
-                      <p className="text-sm text-blue-700">{question.explanation}</p>
+                      <p className="text-sm font-medium text-blue-800 mb-1">
+                        Explanation:
+                      </p>
+                      <p className="text-sm text-blue-700">
+                        {question.explanation}
+                      </p>
                     </div>
                   )}
                 </CardContent>
@@ -623,16 +727,7 @@ export default function QuestionBank() {
             ))}
           </div>
 
-          <div className="flex justify-between pt-4 border-t">
-            <div className="flex space-x-2">
-              <Button 
-                variant="outline" 
-                onClick={() => selectedBank && handleDownloadBank(selectedBank)}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Export Questions
-              </Button>
-            </div>
+          <div className="flex justify-end pt-4 border-t">
             <Button variant="outline" onClick={() => setShowViewModal(false)}>
               Close
             </Button>
