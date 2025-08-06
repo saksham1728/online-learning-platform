@@ -1,31 +1,31 @@
-"use client"
-import React, { useState, useEffect } from 'react'
-import { ArrowLeft, BookOpen, Plus, Search, Filter, Edit, Trash2, Download, Eye, Sparkles, Brain, Target, Clock } from 'lucide-react'
-import Link from 'next/link'
-import { Button } from '../../../../components/ui/button'
-import { Input } from '../../../../components/ui/input'
-import { Textarea } from '../../../../components/ui/textarea'
-import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/card'
-import { Badge } from '../../../../components/ui/badge'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../../../../components/ui/dialog'
-import { Label } from '../../../../components/ui/label'
-import { useUser } from '@clerk/nextjs'
-import axios from 'axios'
-import { toast } from 'sonner'
+"use client";
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, BookOpen, Plus, Search, Filter, Trash2, Download, Eye, Sparkles, Brain } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '../../../../components/ui/button';
+import { Input } from '../../../../components/ui/input';
+import { Textarea } from '../../../../components/ui/textarea';
+import { Card, CardContent, CardHeader, CardTitle } from '../../../../components/ui/card';
+import { Badge } from '../../../../components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../../../../components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../../../../components/ui/dialog';
+import { Label } from '../../../../components/ui/label';
+import { useUser } from '@clerk/nextjs';
+import axios from 'axios';
+import { toast } from 'sonner';
 
-function QuestionBank() {
-  const [questionBanks, setQuestionBanks] = useState([])
-  const [filteredBanks, setFilteredBanks] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [selectedDifficulty, setSelectedDifficulty] = useState('all')
-  const [showCreateModal, setShowCreateModal] = useState(false)
-  const [showViewModal, setShowViewModal] = useState(false)
-  const [selectedBank, setSelectedBank] = useState(null)
-  const [generating, setGenerating] = useState(false)
-  const [deleting, setDeleting] = useState({})
+export default function QuestionBank() {
+  const [questionBanks, setQuestionBanks] = useState([]);
+  const [filteredBanks, setFilteredBanks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedDifficulty, setSelectedDifficulty] = useState('all');
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [selectedBank, setSelectedBank] = useState(null);
+  const [generating, setGenerating] = useState(false);
+  const [deleting, setDeleting] = useState({});
   const [formData, setFormData] = useState({
     topic: '',
     description: '',
@@ -33,8 +33,8 @@ function QuestionBank() {
     difficulty: 'medium',
     questionCount: 10,
     questionTypes: ['multiple-choice']
-  })
-  const { user } = useUser()
+  });
+  const { user } = useUser();
 
   const categories = [
     { value: 'general', label: 'General' },
@@ -47,77 +47,69 @@ function QuestionBank() {
     { value: 'business', label: 'Business' },
     { value: 'history', label: 'History' },
     { value: 'literature', label: 'Literature' }
-  ]
+  ];
 
   const difficulties = [
     { value: 'easy', label: 'Easy' },
     { value: 'medium', label: 'Medium' },
     { value: 'hard', label: 'Hard' }
-  ]
-
-  const questionTypes = [
-    { value: 'multiple-choice', label: 'Multiple Choice' },
-    { value: 'true-false', label: 'True/False' },
-    { value: 'short-answer', label: 'Short Answer' },
-    { value: 'essay', label: 'Essay' }
-  ]
+  ];
 
   useEffect(() => {
     if (user) {
-      loadQuestionBanks()
+      loadQuestionBanks();
     }
-  }, [user])
+  }, [user]);
 
   useEffect(() => {
-    filterBanks()
-  }, [questionBanks, searchTerm, selectedCategory, selectedDifficulty])
+    filterBanks();
+  }, [questionBanks, searchTerm, selectedCategory, selectedDifficulty]);
 
   const loadQuestionBanks = async () => {
     try {
-      setLoading(true)
-      const response = await axios.get('/api/question-banks')
+      setLoading(true);
+      const response = await axios.get('/api/question-banks');
       if (response.data.success) {
-        setQuestionBanks(response.data.questionBanks || [])
+        setQuestionBanks(response.data.questionBanks || []);
       }
     } catch (error) {
-      console.error('Failed to load question banks:', error)
-      // For now, show empty state
-      setQuestionBanks([])
+      console.error('Failed to load question banks:', error);
+      setQuestionBanks([]);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const filterBanks = () => {
-    let filtered = questionBanks
+    let filtered = questionBanks;
 
     if (searchTerm) {
       filtered = filtered.filter(bank => 
         bank.topic.toLowerCase().includes(searchTerm.toLowerCase()) ||
         bank.description?.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+      );
     }
 
     if (selectedCategory !== 'all') {
-      filtered = filtered.filter(bank => bank.category === selectedCategory)
+      filtered = filtered.filter(bank => bank.category === selectedCategory);
     }
 
     if (selectedDifficulty !== 'all') {
-      filtered = filtered.filter(bank => bank.difficulty === selectedDifficulty)
+      filtered = filtered.filter(bank => bank.difficulty === selectedDifficulty);
     }
 
-    setFilteredBanks(filtered)
-  }
+    setFilteredBanks(filtered);
+  };
 
   const handleCreateQuestionBank = async () => {
     if (!formData.topic.trim()) {
-      toast.error('Please enter a topic for the question bank')
-      return
+      toast.error('Please enter a topic for the question bank');
+      return;
     }
 
     try {
-      setGenerating(true)
-      toast.info('Generating questions using AI...')
+      setGenerating(true);
+      toast.info('Generating questions using AI...');
 
       const response = await axios.post('/api/question-banks/generate', {
         topic: formData.topic.trim(),
@@ -126,11 +118,11 @@ function QuestionBank() {
         difficulty: formData.difficulty,
         questionCount: formData.questionCount,
         questionTypes: formData.questionTypes
-      })
+      });
 
       if (response.data.success) {
-        toast.success(`Successfully generated ${response.data.questionBank.questions.length} questions!`)
-        setShowCreateModal(false)
+        toast.success(`Successfully generated ${response.data.questionBank.questions.length} questions!`);
+        setShowCreateModal(false);
         setFormData({
           topic: '',
           description: '',
@@ -138,56 +130,54 @@ function QuestionBank() {
           difficulty: 'medium',
           questionCount: 10,
           questionTypes: ['multiple-choice']
-        })
-        loadQuestionBanks()
+        });
+        loadQuestionBanks();
       } else {
-        toast.error('Failed to generate question bank')
+        toast.error('Failed to generate question bank');
       }
     } catch (error) {
-      console.error('Failed to generate question bank:', error)
-      toast.error('Failed to generate question bank')
+      console.error('Failed to generate question bank:', error);
+      toast.error('Failed to generate question bank');
     } finally {
-      setGenerating(false)
+      setGenerating(false);
     }
-  }
+  };
 
   const handleDeleteBank = async (bankId, topic) => {
     if (!confirm(`Are you sure you want to delete the question bank "${topic}"? This action cannot be undone.`)) {
-      return
+      return;
     }
 
     try {
-      setDeleting(prev => ({ ...prev, [bankId]: true }))
-      await axios.delete(`/api/question-banks/${bankId}`)
-      toast.success('Question bank deleted successfully')
-      loadQuestionBanks()
+      setDeleting(prev => ({ ...prev, [bankId]: true }));
+      await axios.delete(`/api/question-banks/${bankId}`);
+      toast.success('Question bank deleted successfully');
+      loadQuestionBanks();
     } catch (error) {
-      console.error('Failed to delete question bank:', error)
-      toast.error('Failed to delete question bank')
+      console.error('Failed to delete question bank:', error);
+      toast.error('Failed to delete question bank');
     } finally {
-      setDeleting(prev => ({ ...prev, [bankId]: false }))
+      setDeleting(prev => ({ ...prev, [bankId]: false }));
     }
-  }
+  };
 
   const handleViewBank = async (bank) => {
     try {
-      // Fetch the full question bank details
-      const response = await axios.get(`/api/question-banks/${bank.id}`)
+      const response = await axios.get(`/api/question-banks/${bank.id}`);
       if (response.data.success) {
-        setSelectedBank(response.data.questionBank)
-        setShowViewModal(true)
+        setSelectedBank(response.data.questionBank);
+        setShowViewModal(true);
       } else {
-        toast.error('Failed to load question bank details')
+        toast.error('Failed to load question bank details');
       }
     } catch (error) {
-      console.error('Failed to load question bank:', error)
-      toast.error('Failed to load question bank details')
+      console.error('Failed to load question bank:', error);
+      toast.error('Failed to load question bank details');
     }
-  }
+  };
 
   const handleDownloadBank = (bank) => {
     try {
-      // Create downloadable content
       const exportData = {
         topic: bank.topic,
         description: bank.description,
@@ -196,52 +186,50 @@ function QuestionBank() {
         questionCount: bank.questions?.length || 0,
         createdAt: bank.createdAt,
         questions: bank.questions || []
-      }
+      };
 
-      // Convert to JSON string
-      const dataStr = JSON.stringify(exportData, null, 2)
-      const dataBlob = new Blob([dataStr], { type: 'application/json' })
+      const dataStr = JSON.stringify(exportData, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
       
-      // Create download link
-      const url = URL.createObjectURL(dataBlob)
-      const link = document.createElement('a')
-      link.href = url
-      link.download = `${bank.topic.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_question_bank.json`
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-      URL.revokeObjectURL(url)
+      const url = URL.createObjectURL(dataBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${bank.topic.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_question_bank.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
       
-      toast.success(`Downloaded ${bank.topic} question bank!`)
+      toast.success(`Downloaded ${bank.topic} question bank!`);
     } catch (error) {
-      console.error('Failed to download question bank:', error)
-      toast.error('Failed to download question bank')
+      console.error('Failed to download question bank:', error);
+      toast.error('Failed to download question bank');
     }
-  }
+  };
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800'
-      case 'medium': return 'bg-yellow-100 text-yellow-800'
-      case 'hard': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-800'
+      case 'easy': return 'bg-green-100 text-green-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'hard': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
-  }
+  };
 
   const getCategoryIcon = (category) => {
     switch (category) {
-      case 'computer-science': return '💻'
-      case 'mathematics': return '🔢'
-      case 'physics': return '⚛️'
-      case 'chemistry': return '🧪'
-      case 'biology': return '🧬'
-      case 'engineering': return '⚙️'
-      case 'business': return '💼'
-      case 'history': return '📚'
-      case 'literature': return '📖'
-      default: return '📝'
+      case 'computer-science': return '💻';
+      case 'mathematics': return '🔢';
+      case 'physics': return '⚛️';
+      case 'chemistry': return '🧪';
+      case 'biology': return '🧬';
+      case 'engineering': return '⚙️';
+      case 'business': return '💼';
+      case 'history': return '📚';
+      case 'literature': return '📖';
+      default: return '📝';
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -251,7 +239,7 @@ function QuestionBank() {
           <p className="text-gray-600">Loading question banks...</p>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -321,9 +309,9 @@ function QuestionBank() {
             </Select>
 
             <Button variant="outline" onClick={() => {
-              setSearchTerm('')
-              setSelectedCategory('all')
-              setSelectedDifficulty('all')
+              setSearchTerm('');
+              setSelectedCategory('all');
+              setSelectedDifficulty('all');
             }}>
               <Filter className="h-4 w-4 mr-2" />
               Clear Filters
@@ -411,7 +399,6 @@ function QuestionBank() {
           ))}
         </div>
       ) : (
-        // Empty State
         <Card>
           <CardContent className="pt-6">
             <div className="text-center py-12">
@@ -603,7 +590,7 @@ function QuestionBank() {
                       <p className="text-sm font-medium text-gray-700">Options:</p>
                       <div className="grid grid-cols-1 gap-2">
                         {question.options.map((option, optionIndex) => {
-                          const optionLetter = String.fromCharCode(65 + optionIndex); // A, B, C, D
+                          const optionLetter = String.fromCharCode(65 + optionIndex);
                           const isCorrect = question.correctAnswer === optionLetter;
                           return (
                             <div 
@@ -653,7 +640,5 @@ function QuestionBank() {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
-
-export default QuestionBank
