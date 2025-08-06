@@ -161,36 +161,40 @@ function KnowledgeDating() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50">
       {/* Header */}
-      <div className="p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
+      <div className="p-4 sm:p-6">
+        {/* Mobile Header Layout */}
+        <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 mb-6">
+          <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
             <Link href="/workspace">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="w-fit">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Back to Dashboard
               </Button>
             </Link>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
+            <div className="text-center sm:text-left">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-pink-600 to-purple-600 bg-clip-text text-transparent">
                 Knowledge Dating 💕
               </h1>
-              <p className="text-gray-600">
+              <p className="text-sm sm:text-base text-gray-600 mt-1">
                 Swipe right on topics you want to explore, left to skip
               </p>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <Badge variant="outline" className="text-sm">
-              <Heart className="h-4 w-4 mr-1 text-pink-500" />
+          <div className="flex items-center justify-center space-x-3 sm:space-x-4">
+            <Badge variant="outline" className="text-xs sm:text-sm">
+              <Heart className="h-3 w-3 sm:h-4 sm:w-4 mr-1 text-pink-500" />
               {likedCards.length} Liked
             </Badge>
             <Button
               variant="outline"
+              size="sm"
               onClick={handleRefresh}
               disabled={loading}
+              className="text-xs sm:text-sm"
             >
-              <RotateCcw className="h-4 w-4 mr-2" />
-              Refresh Cards
+              <RotateCcw className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
+              <span className="hidden sm:inline">Refresh Cards</span>
+              <span className="sm:hidden">Refresh</span>
             </Button>
           </div>
         </div>
@@ -221,13 +225,13 @@ function KnowledgeDating() {
       </div>
 
       {/* Main Content */}
-      <div className="flex items-center justify-center px-6 pb-6">
+      <div className="flex items-center justify-center px-4 sm:px-6 pb-6">
         {hasMoreCards ? (
-          <div className="relative w-full max-w-md">
+          <div className="relative w-full max-w-sm sm:max-w-md">
             {/* Current Card */}
             <Card
               ref={cardRef}
-              className={`relative w-full h-[500px] cursor-pointer transition-all duration-300 transform hover:scale-105 shadow-xl ${
+              className={`relative w-full h-[450px] sm:h-[500px] cursor-pointer transition-all duration-300 transform hover:scale-105 shadow-xl ${
                 swipeDirection === "right"
                   ? "translate-x-full rotate-12 opacity-0"
                   : swipeDirection === "left"
@@ -239,98 +243,101 @@ function KnowledgeDating() {
                 color: "white",
               }}
             >
-              <CardHeader className="text-center pb-4">
-                <div className="flex items-center justify-between mb-4">
-                  <Badge className={getDifficultyColor(currentCard.difficulty)}>
+              <CardHeader className="text-center pb-3 sm:pb-4 px-4 sm:px-6 pt-4 sm:pt-6">
+                <div className="flex items-center justify-between mb-3 sm:mb-4">
+                  <Badge className={`text-xs sm:text-sm ${getDifficultyColor(currentCard.difficulty)}`}>
                     {currentCard.difficulty}
                   </Badge>
                   {currentCard.trending && (
-                    <Badge className="bg-orange-100 text-orange-800">
+                    <Badge className="bg-orange-100 text-orange-800 text-xs sm:text-sm">
                       <TrendingUp className="h-3 w-3 mr-1" />
-                      Trending
+                      <span className="hidden sm:inline">Trending</span>
+                      <span className="sm:hidden">🔥</span>
                     </Badge>
                   )}
                 </div>
-                <div className="text-6xl mb-4">{currentCard.emoji}</div>
-                <CardTitle className="text-2xl font-bold text-white mb-2">
+                <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">{currentCard.emoji}</div>
+                <CardTitle className="text-xl sm:text-2xl font-bold text-white mb-2 px-2">
                   {currentCard.title}
                 </CardTitle>
-                <Badge variant="secondary" className="mb-4">
+                <Badge variant="secondary" className="mb-3 sm:mb-4 text-xs sm:text-sm">
                   {currentCard.category}
                 </Badge>
               </CardHeader>
 
-              <CardContent className="text-center space-y-6">
-                <p className="text-lg text-gray-100 leading-relaxed">
+              <CardContent className="text-center space-y-4 sm:space-y-6 px-4 sm:px-6">
+                <p className="text-base sm:text-lg text-gray-100 leading-relaxed">
                   {currentCard.description}
                 </p>
 
-                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                  <p className="text-yellow-200 font-medium">
+                <div className="bg-white/10 backdrop-blur-sm rounded-lg p-3 sm:p-4">
+                  <p className="text-yellow-200 font-medium text-sm sm:text-base">
                     {currentCard.hook}
                   </p>
                 </div>
 
-                <div className="flex items-center justify-center space-x-2 text-sm text-gray-200">
-                  <Clock className="h-4 w-4" />
+                <div className="flex items-center justify-center space-x-2 text-xs sm:text-sm text-gray-200">
+                  <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                   <span>Just generated</span>
                 </div>
               </CardContent>
             </Card>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-center space-x-8 mt-8">
+            <div className="flex items-center justify-center space-x-6 sm:space-x-8 mt-6 sm:mt-8">
               <Button
                 size="lg"
                 variant="outline"
-                className="rounded-full w-16 h-16 border-2 border-red-300 hover:bg-red-50 hover:border-red-400"
+                className="rounded-full w-12 h-12 sm:w-16 sm:h-16 border-2 border-red-300 hover:bg-red-50 hover:border-red-400 flex-shrink-0"
                 onClick={() => handleSwipe("left")}
                 disabled={isAnimating}
               >
-                <X className="h-8 w-8 text-red-500" />
+                <X className="h-6 w-6 sm:h-8 sm:w-8 text-red-500" />
               </Button>
 
               <Button
                 size="lg"
-                className="rounded-full w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600"
+                className="rounded-full w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 flex-shrink-0"
                 onClick={() => handleSwipe("right")}
                 disabled={isAnimating}
               >
-                <Heart className="h-8 w-8 text-white" />
+                <Heart className="h-6 w-6 sm:h-8 sm:w-8 text-white" />
               </Button>
             </div>
 
             {/* Swipe Instructions */}
-            <div className="text-center mt-6 space-y-2">
-              <p className="text-gray-600 text-sm">
-                <X className="h-4 w-4 inline text-red-500 mr-1" />
-                Swipe left to skip
-                <span className="mx-4">•</span>
-                <Heart className="h-4 w-4 inline text-pink-500 mr-1" />
-                Swipe right to learn more
+            <div className="text-center mt-4 sm:mt-6 space-y-2 px-4">
+              <p className="text-gray-600 text-xs sm:text-sm">
+                <X className="h-3 w-3 sm:h-4 sm:w-4 inline text-red-500 mr-1" />
+                <span className="hidden sm:inline">Swipe left to skip</span>
+                <span className="sm:hidden">Skip</span>
+                <span className="mx-2 sm:mx-4">•</span>
+                <Heart className="h-3 w-3 sm:h-4 sm:w-4 inline text-pink-500 mr-1" />
+                <span className="hidden sm:inline">Swipe right to learn more</span>
+                <span className="sm:hidden">Learn more</span>
               </p>
             </div>
           </div>
         ) : (
           // No more cards
-          <Card className="w-full max-w-md text-center p-8">
-            <CardContent className="space-y-6">
-              <div className="text-6xl">🎉</div>
+          <Card className="w-full max-w-sm sm:max-w-md text-center p-6 sm:p-8 mx-4">
+            <CardContent className="space-y-4 sm:space-y-6">
+              <div className="text-4xl sm:text-6xl">🎉</div>
               <div>
-                <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                <h3 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2">
                   All caught up!
                 </h3>
-                <p className="text-gray-600">
+                <p className="text-gray-600 text-sm sm:text-base">
                   You've swiped through all available knowledge cards.
                 </p>
               </div>
 
               {likedCards.length > 0 && (
-                <div className="bg-pink-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-pink-800 mb-2">
+                <div className="bg-pink-50 rounded-lg p-3 sm:p-4">
+                  <h4 className="font-semibold text-pink-800 mb-2 text-sm sm:text-base">
                     Your Liked Topics ({likedCards.length})
                   </h4>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
                     {likedCards.slice(0, 5).map((card, index) => (
                       <Badge key={index} variant="outline" className="text-xs">
                         {card.emoji} {card.title}
@@ -407,51 +414,51 @@ function KnowledgeDating() {
 
       {/* Details Modal */}
       {showDetails && detailsData && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-hidden">
-          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-hidden mx-auto">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4 overflow-hidden">
+          <div className="bg-white rounded-lg max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] overflow-hidden mx-auto">
             {/* Modal Header */}
-            <div className="p-6 border-b bg-gradient-to-r from-pink-500 to-purple-500 text-white">
+            <div className="p-4 sm:p-6 border-b bg-gradient-to-r from-pink-500 to-purple-500 text-white">
               <div className="flex items-center justify-between">
-                <div>
-                  <h2 className="text-2xl font-bold">{detailsData.title}</h2>
-                  <p className="text-pink-100 mt-1">
+                <div className="flex-1 min-w-0 pr-4">
+                  <h2 className="text-lg sm:text-2xl font-bold truncate">{detailsData.title}</h2>
+                  <p className="text-pink-100 mt-1 text-sm sm:text-base">
                     Deep dive into this fascinating topic
                   </p>
                 </div>
                 <Button
                   variant="ghost"
                   onClick={handleCloseDetails}
-                  className="text-white hover:bg-white/20"
+                  className="text-white hover:bg-white/20 flex-shrink-0 p-2"
                 >
-                  <X className="h-6 w-6" />
+                  <X className="h-5 w-5 sm:h-6 sm:w-6" />
                 </Button>
               </div>
             </div>
 
             {/* Modal Content */}
-            <div className="p-6 overflow-y-auto max-h-[calc(90vh-120px)]">
+            <div className="p-4 sm:p-6 overflow-y-auto max-h-[calc(95vh-100px)] sm:max-h-[calc(90vh-120px)]">
               {/* Overview */}
-              <div className="mb-8">
-                <p className="text-lg text-gray-700 leading-relaxed">
+              <div className="mb-6 sm:mb-8">
+                <p className="text-base sm:text-lg text-gray-700 leading-relaxed">
                   {detailsData.overview}
                 </p>
               </div>
 
               {/* Quick Facts */}
               {detailsData.quickFacts && (
-                <div className="mb-8 bg-blue-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-blue-800 mb-3 flex items-center">
-                    <Sparkles className="h-5 w-5 mr-2" />
+                <div className="mb-6 sm:mb-8 bg-blue-50 rounded-lg p-3 sm:p-4">
+                  <h3 className="font-semibold text-blue-800 mb-3 flex items-center text-sm sm:text-base">
+                    <Sparkles className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                     Quick Facts
                   </h3>
                   <ul className="space-y-2">
                     {detailsData.quickFacts.map((fact, index) => (
                       <li
                         key={index}
-                        className="text-blue-700 flex items-start"
+                        className="text-blue-700 flex items-start text-sm sm:text-base"
                       >
-                        <span className="text-blue-500 mr-2">•</span>
-                        {fact}
+                        <span className="text-blue-500 mr-2 flex-shrink-0">•</span>
+                        <span>{fact}</span>
                       </li>
                     ))}
                   </ul>
@@ -459,17 +466,17 @@ function KnowledgeDating() {
               )}
 
               {/* Detailed Sections */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                 {detailsData.sections?.map((section, index) => (
                   <Card key={index} className="h-full">
-                    <CardHeader className="pb-3">
-                      <CardTitle className="text-lg flex items-center">
-                        <span className="text-2xl mr-2">{section.emoji}</span>
-                        {section.heading}
+                    <CardHeader className="pb-3 p-4 sm:p-6">
+                      <CardTitle className="text-base sm:text-lg flex items-center">
+                        <span className="text-xl sm:text-2xl mr-2 flex-shrink-0">{section.emoji}</span>
+                        <span className="min-w-0">{section.heading}</span>
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-gray-700 leading-relaxed">
+                    <CardContent className="p-4 sm:p-6 pt-0">
+                      <p className="text-gray-700 leading-relaxed text-sm sm:text-base">
                         {section.content}
                       </p>
                     </CardContent>
@@ -479,17 +486,17 @@ function KnowledgeDating() {
 
               {/* Related Topics */}
               {detailsData.relatedTopics && (
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="font-semibold text-gray-800 mb-3 flex items-center">
-                    <BookOpen className="h-5 w-5 mr-2" />
+                <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                  <h3 className="font-semibold text-gray-800 mb-3 flex items-center text-sm sm:text-base">
+                    <BookOpen className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
                     Related Topics to Explore
                   </h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1 sm:gap-2">
                     {detailsData.relatedTopics.map((topic, index) => (
                       <Badge
                         key={index}
                         variant="outline"
-                        className="cursor-pointer hover:bg-gray-100"
+                        className="cursor-pointer hover:bg-gray-100 text-xs sm:text-sm"
                       >
                         {topic}
                       </Badge>

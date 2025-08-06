@@ -164,23 +164,26 @@ function QuizResultsPage() {
   const resultMessage = getResultMessage()
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8 space-y-6">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-4 sm:py-8 space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
         <div className="flex items-center space-x-4">
-          <Link href="/workspace/ai-tools/my-quizzes">
+          <Link href="/workspace">
             <Button variant="outline" size="sm">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to My Quizzes
+              Back to Dashboard
             </Button>
           </Link>
+          <div className="hidden sm:block">
+            <h1 className="text-xl sm:text-2xl font-bold">Quiz Results</h1>
+          </div>
         </div>
-        <div className="flex space-x-2">
-          <Button variant="outline" onClick={handleShareResults}>
+        <div className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-2">
+          <Button variant="outline" onClick={handleShareResults} className="w-full sm:w-auto">
             <Share2 className="h-4 w-4 mr-2" />
             Share
           </Button>
-          <Button variant="outline" onClick={downloadResults}>
+          <Button variant="outline" onClick={downloadResults} className="w-full sm:w-auto">
             <Download className="h-4 w-4 mr-2" />
             Download
           </Button>
@@ -189,66 +192,66 @@ function QuizResultsPage() {
 
       {/* Results Summary */}
       <Card className="text-center">
-        <CardHeader>
+        <CardHeader className="px-4 sm:px-6">
           <div className="flex justify-center mb-4">
             {getResultIcon()}
           </div>
-          <CardTitle className="text-2xl">{quiz.title}</CardTitle>
-          <div className={`text-xl font-semibold ${resultMessage.color}`}>
+          <CardTitle className="text-xl sm:text-2xl px-2">{quiz.title}</CardTitle>
+          <div className={`text-lg sm:text-xl font-semibold ${resultMessage.color}`}>
             {resultMessage.title}
           </div>
-          <p className="text-gray-600">{resultMessage.message}</p>
+          <p className="text-gray-600 text-sm sm:text-base">{resultMessage.message}</p>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 sm:space-y-6 px-4 sm:px-6">
           {/* Score Display */}
           <div className="text-center">
-            <div className="text-6xl font-bold text-primary mb-2">
+            <div className="text-4xl sm:text-6xl font-bold text-primary mb-2">
               {percentage}%
             </div>
-            <div className="text-lg text-gray-600">
+            <div className="text-base sm:text-lg text-gray-600">
               {attempt.score} out of {attempt.maxScore} points
             </div>
             <Progress value={percentage} className="w-full max-w-md mx-auto mt-4" />
           </div>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div className="text-center p-4 bg-blue-50 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div className="text-center p-3 sm:p-4 bg-blue-50 rounded-lg">
+              <div className="text-lg sm:text-2xl font-bold text-blue-600">
                 {Math.round((attempt.score / attempt.maxScore) * 100)}%
               </div>
-              <div className="text-sm text-blue-800">Score</div>
+              <div className="text-xs sm:text-sm text-blue-800">Score</div>
             </div>
-            <div className="text-center p-4 bg-green-50 rounded-lg">
-              <div className="text-2xl font-bold text-green-600">
+            <div className="text-center p-3 sm:p-4 bg-green-50 rounded-lg">
+              <div className="text-lg sm:text-2xl font-bold text-green-600">
                 {formatTime(attempt.timeTaken)}
               </div>
-              <div className="text-sm text-green-800">Time Taken</div>
+              <div className="text-xs sm:text-sm text-green-800">Time Taken</div>
             </div>
-            <div className="text-center p-4 bg-purple-50 rounded-lg">
-              <div className="text-2xl font-bold text-purple-600">
+            <div className="text-center p-3 sm:p-4 bg-purple-50 rounded-lg">
+              <div className="text-lg sm:text-2xl font-bold text-purple-600">
                 {quiz.settings?.passingScore || 70}%
               </div>
-              <div className="text-sm text-purple-800">Passing Score</div>
+              <div className="text-xs sm:text-sm text-purple-800">Passing Score</div>
             </div>
-            <div className="text-center p-4 bg-orange-50 rounded-lg">
-              <div className="text-2xl font-bold text-orange-600">
+            <div className="text-center p-3 sm:p-4 bg-orange-50 rounded-lg">
+              <div className="text-lg sm:text-2xl font-bold text-orange-600">
                 {passed ? 'PASS' : 'FAIL'}
               </div>
-              <div className="text-sm text-orange-800">Result</div>
+              <div className="text-xs sm:text-sm text-orange-800">Result</div>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-col space-y-3 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
             {quiz.settings?.allowRetake !== false && (
-              <Button onClick={handleRetakeQuiz} size="lg">
+              <Button onClick={handleRetakeQuiz} size="lg" className="w-full sm:w-auto">
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Retake Quiz
               </Button>
             )}
-            <Link href={`/workspace/ai-tools/analytics?quiz=${quiz.quizId}`}>
-              <Button variant="outline" size="lg">
+            <Link href={`/workspace/ai-tools/analytics?quiz=${quiz.quizId}`} className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" className="w-full">
                 View Analytics
               </Button>
             </Link>

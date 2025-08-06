@@ -212,25 +212,25 @@ function MockExams() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Link href="/workspace/engineering/dashboard">
-            <Button variant="outline" size="sm">
+      <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+          <Link href="/workspace">
+            <Button variant="outline" size="sm" className="w-fit">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </Button>
           </Link>
-          <div>
-            <h1 className="text-3xl font-bold">Mock Exams</h1>
-            <p className="text-gray-600">
-              AI-generated mock exams based on previous year patterns for {userBranch?.branchName || 'Engineering'}
-            </p>
-          </div>
+          <Button className="w-full sm:w-auto">
+            <Target className="h-4 w-4 mr-2" />
+            Create Custom Exam
+          </Button>
         </div>
-        <Button>
-          <Target className="h-4 w-4 mr-2" />
-          Create Custom Exam
-        </Button>
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl font-bold">Mock Exams</h1>
+          <p className="text-gray-600 text-sm sm:text-base">
+            AI-generated mock exams based on previous year patterns
+          </p>
+        </div>
       </div>
 
       {/* Stats Overview */}

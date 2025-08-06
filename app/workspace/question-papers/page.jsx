@@ -230,20 +230,18 @@ function QuestionPapers() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <Link href="/workspace/engineering/dashboard">
-            <Button variant="outline" size="sm">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to Dashboard
-            </Button>
-          </Link>
-          <div>
-            <h1 className="text-3xl font-bold">Question Papers</h1>
-            <p className="text-gray-600">
-              Previous year question papers for {userBranch?.branchName || 'Engineering'}
-            </p>
-          </div>
+      <div className="flex flex-col space-y-4">
+        <Link href="/workspace">
+          <Button variant="outline" size="sm" className="w-fit">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </Link>
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl font-bold">Question Papers</h1>
+          <p className="text-gray-600 text-sm sm:text-base">
+            Previous year question papers for all engineering branches
+          </p>
         </div>
       </div>
 

@@ -170,30 +170,30 @@ function AnalyticsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
+      <div className="flex flex-col space-y-4">
+        <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
           <Link href="/workspace/ai-tools">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="w-fit">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to AI Tools
             </Button>
           </Link>
-          <div>
-            <h1 className="text-3xl font-bold">Performance Analytics</h1>
-            <p className="text-gray-600">Track your learning progress and identify areas for improvement</p>
-          </div>
+          <Select value={timeRange} onValueChange={setTimeRange}>
+            <SelectTrigger className="w-full sm:w-40">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Time</SelectItem>
+              <SelectItem value="7d">Last 7 Days</SelectItem>
+              <SelectItem value="30d">Last 30 Days</SelectItem>
+              <SelectItem value="90d">Last 90 Days</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <Select value={timeRange} onValueChange={setTimeRange}>
-          <SelectTrigger className="w-40">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Time</SelectItem>
-            <SelectItem value="7d">Last 7 Days</SelectItem>
-            <SelectItem value="30d">Last 30 Days</SelectItem>
-            <SelectItem value="90d">Last 90 Days</SelectItem>
-          </SelectContent>
-        </Select>
+        <div className="text-center sm:text-left">
+          <h1 className="text-2xl sm:text-3xl font-bold">Performance Analytics</h1>
+          <p className="text-gray-600 text-sm sm:text-base">Track your learning progress and identify areas for improvement</p>
+        </div>
       </div>
 
       {/* Overview Stats */}

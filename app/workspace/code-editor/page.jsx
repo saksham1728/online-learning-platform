@@ -29,22 +29,22 @@ function CodeEditorPage() {
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-white">
-        <div className="flex items-center space-x-4">
-          <Link href="/workspace/dashboard">
-            <Button variant="outline" size="sm">
+      <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0 p-4 border-b bg-white">
+        <div className="flex flex-col space-y-3 sm:flex-row sm:items-center sm:space-y-0 sm:space-x-4">
+          <Link href="/workspace">
+            <Button variant="outline" size="sm" className="w-fit">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </Button>
           </Link>
-          <div>
-            <h1 className="text-2xl font-bold">Code Editor</h1>
+          <div className="text-center sm:text-left">
+            <h1 className="text-xl sm:text-2xl font-bold">Code Editor</h1>
             <p className="text-gray-600 text-sm">Write, edit, and share your code</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
-          <Link href="/workspace/code-management">
-            <Button variant="outline">
+          <Link href="/workspace/code-management" className="w-full sm:w-auto">
+            <Button variant="outline" className="w-full sm:w-auto text-sm">
               My Shared Codes
             </Button>
           </Link>
