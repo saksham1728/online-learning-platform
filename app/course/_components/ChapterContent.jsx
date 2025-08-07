@@ -104,13 +104,16 @@ function ChapterContent({courseInfo,refreshData}) {
 
       <div className='space-y-6 sm:space-y-8'>
           {topics?.map((topic, index) => (
-              <div key={index} className='p-4 sm:p-5 lg:p-6 bg-secondary rounded-xl lg:rounded-2xl'>
-                <h2 className='font-bold text-lg sm:text-xl lg:text-2xl text-primary mb-4'>{topic?.name}</h2>
+              <div key={index} className='p-4 sm:p-5 lg:p-6 bg-secondary rounded-xl lg:rounded-2xl overflow-hidden'>
+                <h2 className='font-bold text-lg sm:text-xl lg:text-2xl text-primary mb-4 break-words'>{topic?.name}</h2>
                 <div 
                   dangerouslySetInnerHTML={{ __html: topic?.content }}
-                  className="prose prose-sm sm:prose lg:prose-lg max-w-none"
+                  className="prose prose-sm sm:prose lg:prose-lg max-w-none overflow-hidden break-words"
                   style={{
-                    lineHeight:'1.8'
+                    lineHeight:'1.8',
+                    wordWrap: 'break-word',
+                    overflowWrap: 'break-word',
+                    hyphens: 'auto'
                   }}
                 ></div>
               </div>
