@@ -24,9 +24,11 @@ function EditCourse({viewCourse=false}) {
     }
 
   return (
-    <div>
-        <CourseInfo course={course} viewCourse={viewCourse}/>
-        <ChapterTopicList course={course}/>
+    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 lg:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+            <CourseInfo course={course} viewCourse={viewCourse}/>
+            <ChapterTopicList course={course}/>
+        </div>
     </div>
   )
 }

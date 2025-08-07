@@ -27,14 +27,18 @@ function Course() {
         }
     };
   return (
-    <div>
-        <div className="fixed w-full bg-white"></div>
+    <div className="min-h-screen bg-gray-50">
+        <div className="fixed w-full bg-white z-10 shadow-sm">
             <AppHeader hideSidebar={true}/>
-        <div className='flex gap-10 items-start'>
-            <ChapterListSidebar courseInfo={courseInfo}/>
-            <ChapterContent courseInfo={courseInfo} refreshData={()=>GetEnrolledCourseById()}/>
         </div>
-
+        <div className='flex flex-col lg:flex-row gap-0 lg:gap-6 pt-16'>
+            <div className="lg:w-80 xl:w-96">
+                <ChapterListSidebar courseInfo={courseInfo}/>
+            </div>
+            <div className="flex-1 min-w-0">
+                <ChapterContent courseInfo={courseInfo} refreshData={()=>GetEnrolledCourseById()}/>
+            </div>
+        </div>
     </div>
   )
 }
