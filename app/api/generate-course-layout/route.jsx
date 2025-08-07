@@ -9,6 +9,7 @@ import { NextResponse } from 'next/server';
 import { coursesTable } from '../../../config/schema';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { db } from '../../../config/db';
+import { eq } from 'drizzle-orm';
 import axios from 'axios';
 
 
