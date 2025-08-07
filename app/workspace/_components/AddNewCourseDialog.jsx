@@ -43,7 +43,7 @@ import { toast } from 'sonner'
         ...prev,
         [field]:value
       }))
-      console.log  (formData);
+      console.log(formData);
     }
 
     const onGenerate=async ()=>{
